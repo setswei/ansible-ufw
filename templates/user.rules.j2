@@ -25,15 +25,15 @@
 
 {% endfor %}
 {% for item in ufw_whitelisted_ports %}
-### tuple ### allow {{ item.protocol }} {{ item.port }} 0.0.0.0/0 any 0.0.0.0/0 in{% if item.interface != 'any' %}_{{ item.interface }}{% endif %}
+### tuple ### allow {{ item.protocol }} {{ item.port }} 0.0.0.0/0 any 0.0.0.0/0 in{% if item.interface is defined %}{% if item.interface != 'any' %}_{{ item.interface }}{% endif %}{% endif %}
 
--A ufw-user-input -p {{ item.protocol }} {% if item.interface != 'any' %}-i {{ item.interface }}{% endif %} --dport {{ item.port }} -j ACCEPT
+-A ufw-user-input -p {{ item.protocol }} {% if item.interface is defined %}{% if item.interface != 'any' %}-i {{ item.interface }}{% endif %}{% endif %} --dport {{ item.port }} -j ACCEPT
 
 {% endfor %}
 {% for tuple in ufw_whitelisted_ipv4_addresses %}
-### tuple ### allow {{ tuple.protocol }} {{ tuple.port }} 0.0.0.0/0 any {{ tuple.address }} in{% if item.interface != 'any' %}_{{ item.interface }}{% endif %}
+### tuple ### allow {{ tuple.protocol }} {{ tuple.port }} 0.0.0.0/0 any {{ tuple.address }} in{% if item.interface is defined %}{% if item.interface != 'any' %}_{{ item.interface }}{% endif %}{% endif %}
 
--A ufw-user-input -p {{ tuple.protocol }} {% if item.interface != 'any' %}-i {{ item.interface }}{% endif %} --dport {{ tuple.port }} -s {{ tuple.address }} -j ACCEPT
+-A ufw-user-input -p {{ tuple.protocol }} {% if item.interface is defined %}{% if item.interface != 'any' %}-i {{ item.interface }}{% endif %}{% endif %} --dport {{ tuple.port }} -s {{ tuple.address }} -j ACCEPT
 
 {% endfor %}
 ### END RULES ###

@@ -14,7 +14,7 @@ Role Variables
       - { port: 53,   protocol: udp }
       - { port: 3306, protocol: tcp }
 
-**ufw_whitelisted_ipv4_addresses**: A list of IPv4 address, port, and protocol tuples that the firewall should allow access to. The default is empty. This is a good way to ensure that certain services can only be reached by approved IP addresses. The following example would grant SSH access to 192.168.0.1 over TCP, and OpenVPN access to 10.0.0.1 over UDP:
+**ufw_whitelisted_ipv4_addresses**: A list of IPv4 address, port, protocol and interface tuples that the firewall should allow access to. The default is empty. This is a good way to ensure that certain services can only be reached by approved IP addresses. The following example would grant SSH access to 192.168.0.1 over TCP, and OpenVPN access to 10.0.0.1 over UDP:
 
     ufw_whitelisted_ipv4_addresses:
       - { address: 192.168.0.1, port: 22,   protocol: tcp }
@@ -26,13 +26,21 @@ Role Variables
       - { address: "2607:f8b0:4004:802::1001",          port: 53,   protocol: udp }
       - { address: "2a03:2880:2110:df07:face:b00c:0:1", port: 9312, protocol: tcp }
 
-**ufw_whitelisted_ports**: A list of port and protocol pairs that the firewall should allow access to. The default is to open port 22 over TCP. This variable applies to incoming connections from both IPv4 and IPv6 clients. If you wanted to allow access to SSH, DNS, and Nginx, you might do something like this:
+**ufw_whitelisted_ports**: A list of port, protocol and interface pairs that the firewall should allow access to. The default is to open port 22 over TCP. This variable applies to incoming connections from both IPv4 and IPv6 clients. If you wanted to allow access to SSH, DNS, and Nginx, you might do something like this:
 
     ufw_whitelisted_ports:
       -  { port: 22,  protocol: tcp }
       -  { port: 53,  protocol: udp }
       -  { port: 80,  protocol: tcp }
       -  { port: 443, protocol: tcp }
+
+You can optionally include an interface to these rules. If it is present on one in the dictionary it must be present on all.
+
+    ufw_whitelisted_ports:
+      -  { port: 22,  protocol: tcp, interface: any  }
+      -  { port: 53,  protocol: udp, interface: any  }
+      -  { port: 80,  protocol: tcp, interface: eth0 }
+      -  { port: 443, protocol: tcp, interface: eth0 }
 
 License
 -------
