@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  vars:
+    ufw_whitelisted_ports:
+      - { port: 22, protocol: tcp }
+
+  roles:
+    - ansible-role-ufw
