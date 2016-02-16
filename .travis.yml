@@ -5,16 +5,16 @@ env:
     version: 14.04
     init: /sbin/init
     run_opts: ""
-#  - distribution: ubuntu
-#    version: 12.04
-#    init: /sbin/init
-#    run_opts: ""
+  - distribution: ubuntu
+    version: 12.04
+    init: /sbin/init
+    run_opts: ""
 
 services:
   - docker
 
 before_install:
-  # - sudo apt-get update
+  - sudo apt-get update
   # Pull container
   - 'sudo docker pull ${distribution}:${version}'
   # Customize container
@@ -22,7 +22,8 @@ before_install:
 
 script:
   - container_id=$(mktemp)
-    # Run container in detached state
+  
+  # Run container in detached state
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/ansible-role-ufw:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
 
   # Ansible syntax check.
@@ -46,4 +47,4 @@ script:
     || (echo 'UFW is not running' && exit 1)
 
   # Clean up
-  - 'sudo docker stop "$(cat ${container_id})"'
+  - 'sudo docker stop "$(cat ${container_id})"'A
