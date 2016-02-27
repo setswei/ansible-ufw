@@ -2,7 +2,16 @@
 - name: Install ufw
   apt: pkg=ufw
 
-- name: Generate ufw rules
+- name: Apply Debian/Ubuntu Default file for UFW
+  template: src={{ item }}.j2
+            dest=/etc/default/ufw
+            owner=root
+            group=root
+            mode=644
+  with_items:
+    - ufw-default
+
+- name: Generate ufw rules IPV4
   template: src={{ item }}.j2
             dest=/lib/ufw/{{ item }}
             owner=root
@@ -10,7 +19,17 @@
             mode=640
   with_items:
     - user.rules
+  notify: Restart ufw
+
+- name: Generate ufw rules IPV6
+  template: src={{ item }}.j2
+            dest=/lib/ufw/{{ item }}
+            owner=root
+            group=root
+            mode=640
+  with_items:
     - user6.rules
+  when: ufw_enable_ipv6 == "yes"
   notify: Restart ufw
 
 - name: Enable ufw

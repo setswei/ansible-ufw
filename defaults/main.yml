@@ -4,3 +4,11 @@ ufw_whitelisted_ipv4_addresses: [ ]
 ufw_whitelisted_ipv6_addresses: [ ]
 ufw_whitelisted_ports:
   -  { port: 22,  protocol: tcp }
+
+# UFW Default File Config
+ufw_enable_ipv6: yes                    # yes/no
+ufw_default_input_policy: DROP          # ACCEPT/DROP/REJECT
+ufw_default_output_policy: ACCEPT       # ACCEPT/DROP/REJECT
+ufw_default_forward_policy: DROP        # ACCEPT/DROP/REJECT
+ufw_default_application_policy: SKIP    # ACCEPT/DROP/REJECT/SKIP
+ufw_manage_builtins: no                 # yes/no
